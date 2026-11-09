@@ -1,0 +1,19 @@
+'use client';
+import { useState } from 'react';
+import { Badge, Empty, ErrorBox, Modal, Notice, PageLoading, StatusBadge, useToast } from '@/components/ui';
+import { api, errMsg } from '@/lib/api';
+import { useFetch } from '@/lib/hooks';
+
+export default function Sellers() {
+  const [status, setStatus] = useState('submitted'); const { data, loading, error, reload } = useFetch<any>('/admin/sellers', { status }); const toast = useToast();
+  const [s, setS] = useState<any>(null); const [comment, setComment] = useState(''); const [pct, setPct] = useState('');
+  async function decide(decision: string) { try { await api(`/admin/sellers/${s._id}/decision`, { body: { decision, comment: comment || undefined, commissionOverridePercent: pct === '' ? undefined : Number(pct) } }); toast('Decision saved'); setS(null); setComment(''); reload(); } catch (e) { toast(errMsg(e), 'bad'); } }
+  return <div className="space-y-4"><h1 className="text-3xl md:text-4xl">Sellers & KYC</h1><div className="flex flex-wrap gap-2">{['submitted', 'under_review', 'approved', 'rejected', 'suspended', 'draft'].map((x) => <button key={x} onClick={() => setStatus(x)} aria-pressed={status === x} className={`min-h-[40px] rounded-full border px-4 text-sm ${status === x ? 'border-plum bg-plum text-white' : 'border-line bg-white'}`}>{x.replace('_', ' ')}</button>)}</div>
+    {loading ? <PageLoading /> : error ? <ErrorBox message={error} onRetry={reload} /> : !data.items.length ? <Empty title={`No ${status.replace('_', ' ')} sellers`} /> : data.items.map((x: any) => <div key={x._id} className="card flex flex-wrap items-center justify-between gap-3 p-4"><div><p className="font-medium">{x.shopName}</p><p className="text-sm text-muted">{x.legalName} · {x.userId?.email}</p></div><div className="flex items-center gap-2">{x.kycComplete ? <Badge tone="ok">KYC submitted</Badge> : <Badge tone="warn">KYC pending</Badge>}<StatusBadge s={x.status} /><button className="btn-plum btn-sm" onClick={() => { setS(x); setPct(x.commissionOverridePercent ?? ''); }}>Review</button></div></div>)}
+    <Modal open={!!s} onClose={() => setS(null)} title={s?.shopName ?? ''}>{s && <div className="space-y-3 text-sm">
+      {!s.kycComplete && <Notice tone="warn">This seller has not submitted KYC details yet. You can approve once they do.</Notice>}
+      <dl className="grid grid-cols-2 gap-2"><dt className="text-muted">Legal name</dt><dd>{s.legalName}</dd><dt className="text-muted">Contact</dt><dd>{s.contactEmail} · {s.contactPhone}</dd><dt className="text-muted">Address</dt><dd>{[s.address?.line1, s.address?.city, s.address?.state, s.address?.pincode].filter(Boolean).join(', ')}</dd><dt className="text-muted">GSTIN</dt><dd>{s.gstin || '—'}</dd><dt className="text-muted">PAN</dt><dd>{s.pan}</dd><dt className="text-muted">Bank</dt><dd>{s.bankRef?.holder} ••{s.bankRef?.last4} {s.bankRef?.ifsc}</dd><dt className="text-muted">KYC documents</dt><dd>{s.kycDocs?.map((d: any) => d.type).join(', ') || 'none'} <span className="block text-xs text-muted">Stored privately; open via Cloudinary admin.</span></dd></dl>
+      <div><label className="label">Commission override % (optional)</label><input className="input tnum" inputMode="decimal" value={pct} onChange={(e) => setPct(e.target.value)} /></div>
+      <div><label className="label">Note to seller (required to reject/suspend)</label><textarea className="input min-h-20" value={comment} onChange={(e) => setComment(e.target.value)} /></div>
+      <div className="flex flex-wrap gap-2"><button className="btn-primary btn-sm" disabled={!s.kycComplete} onClick={() => decide('approved')}>Approve</button><button className="btn-ghost btn-sm" onClick={() => decide('under_review')}>Mark under review</button><button className="btn-ghost btn-sm" onClick={() => decide('rejected')}>Reject</button><button className="btn-ghost btn-sm text-bad" onClick={() => decide('suspended')}>Suspend</button></div></div>}</Modal></div>;
+}
