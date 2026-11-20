@@ -87,10 +87,10 @@ export default function Home() {
                 <Image
                   src="/home/hero-portrait.jpg"
                   alt="Radiant smiling woman with Atelier Botanical Formulation"
-                  width={632}
-                  height={416}
+                  width={800}
+                  height={533}
                   priority
-                  className="w-full h-auto object-cover select-none"
+                  className="w-full aspect-[4/3] object-cover object-top select-none"
                 />
 
                 {/* Top Right Certificate Tag */}
