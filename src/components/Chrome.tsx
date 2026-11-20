@@ -65,14 +65,14 @@ function Dropdown({ label, items, active }: { label: string; items: [string, str
         <ChevronDown size={13} aria-hidden className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
-        <div className="absolute left-0 top-full z-50 pt-1.5">
-          <ul className="min-w-[210px] rounded-xl border border-line bg-white/98 p-1.5 shadow-luxury backdrop-blur">
+        <div className="absolute left-0 top-full z-[100] pt-1">
+          <ul className="min-w-[220px] max-h-[380px] overflow-y-auto rounded-2xl border border-[#E8DCE0] bg-white p-2 shadow-2xl ring-1 ring-black/5 divide-y divide-[#F7EFF1]">
             {items.map(([name, href]) => (
               <li key={href}>
                 <Link
                   href={href}
                   onClick={() => setOpen(false)}
-                  className="block rounded-lg px-3 py-2 text-xs font-medium text-ink/90 hover:bg-[#FAF0F2] hover:text-[#630D2B] transition-colors"
+                  className="block rounded-xl px-3.5 py-2.5 text-xs font-semibold text-[#24141E] hover:bg-[#FAF0F2] hover:text-[#630D2B] transition-colors"
                 >
                   {name}
                 </Link>
@@ -141,7 +141,7 @@ export function Header() {
   return (
     <>
       <TopBar />
-      <header className="sticky top-0 z-30 border-b border-[#F0E5E8] bg-white/95 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-[#F0E5E8] bg-white shadow-xs">
         <div className="container py-3">
           {/* Main row: Logo, Search, User actions */}
           <div className="flex items-center gap-4 lg:gap-8">
@@ -166,7 +166,7 @@ export function Header() {
                 />
                 <Search size={16} className="absolute left-3.5 top-3 text-[#7A646E]" />
                 {(sugg.products.length > 0 || sugg.brands.length > 0) && (
-                  <div className="card absolute inset-x-0 top-11 z-40 p-2 shadow-luxury border-line">
+                  <div className="absolute inset-x-0 top-11 z-[100] rounded-2xl border border-[#E8DCE0] bg-white p-2 shadow-2xl ring-1 ring-black/5">
                     {sugg.brands.map((b) => (
                       <Link
                         key={b.slug}
@@ -226,7 +226,7 @@ export function Header() {
                   <User size={18} />
                 </button>
                 {userOpen && me && (
-                  <div className="card absolute right-0 top-11 z-50 w-56 p-2 shadow-luxury border-line">
+                  <div className="absolute right-0 top-11 z-[100] w-60 rounded-2xl border border-[#E8DCE0] bg-white p-2 shadow-2xl ring-1 ring-black/5">
                     <p className="truncate px-3 py-1.5 text-xs font-semibold text-ink">{me.name}</p>
                     <p className="truncate px-3 pb-2 text-[11px] text-muted">
                       {me.role === 'SHOP_OWNER' ? 'Seller' : me.role === 'ADMIN' ? 'Admin' : 'Shopper'} · {me.email}

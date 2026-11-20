@@ -83,18 +83,18 @@ export default function Home() {
 
             {/* Right Hero Image Card */}
             <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
-              <div className="relative overflow-hidden rounded-3xl shadow-luxury bg-[#FAF0F2] border border-white">
+              <div className="relative h-[420px] sm:h-[480px] lg:h-[520px] w-full overflow-hidden rounded-3xl shadow-luxury bg-[#FAF0F2] border border-white">
                 <Image
                   src="/home/hero-portrait.jpg"
                   alt="Radiant smiling woman with Atelier Botanical Formulation"
-                  width={800}
-                  height={533}
+                  fill
                   priority
-                  className="w-full aspect-[4/3] object-cover object-top select-none"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover object-top select-none"
                 />
 
                 {/* Top Right Certificate Tag */}
-                <div className="absolute right-4 top-4 rounded-xl bg-[#FAF1E6] px-3 py-1.5 shadow-md border border-[#F0E0D0]/80">
+                <div className="absolute right-4 top-4 z-10 rounded-xl bg-[#FAF1E6]/95 px-3 py-1.5 shadow-md border border-[#F0E0D0]/80 backdrop-blur-xs">
                   <p className="text-[9px] font-bold uppercase tracking-wider text-[#8C6D58] text-center leading-tight">
                     SKIN MATCH
                     <br />
@@ -103,7 +103,7 @@ export default function Home() {
                 </div>
 
                 {/* Floating Bottom Card */}
-                <div className="absolute inset-x-4 bottom-4 rounded-2xl bg-white/95 p-3.5 shadow-md backdrop-blur border border-white/80 flex items-center justify-between gap-3">
+                <div className="absolute inset-x-4 bottom-4 z-10 rounded-2xl bg-white/95 p-3.5 shadow-md backdrop-blur border border-white/80 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2.5">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FCECF0] text-[#630D2B]">
                       <Sparkles size={16} />
