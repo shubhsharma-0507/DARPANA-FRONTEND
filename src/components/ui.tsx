@@ -26,25 +26,31 @@ export const Notice = ({ tone = 'info', children }: { tone?: 'info' | 'warn' | '
   return <div role={tone === 'bad' ? 'alert' : 'status'} className={`rounded-xl border px-4 py-3 text-sm ${t}`}>{children}</div>;
 };
 export const Badge = ({ children, tone = 'plain' }: { children: React.ReactNode; tone?: 'plain' | 'ok' | 'warn' | 'bad' | 'plum' }) => {
-  const t = { plain: 'bg-[#F1ECE7] text-ink', ok: 'bg-[#E3F3EA] text-ok', warn: 'bg-[#FBEFD9] text-warn', bad: 'bg-[#FBE4E1] text-bad', plum: 'bg-plum-soft text-plum' }[tone];
+  const t = {
+    plain: 'bg-[#FAF0F2] text-ink/80 border border-[#EFE3E6]',
+    ok: 'bg-[#EAF5EF] text-[#26734E] border border-[#D5EADB]',
+    warn: 'bg-[#FAF3E8] text-[#8C6D58] border border-[#F2E5D5]',
+    bad: 'bg-[#FCECF0] text-[#B42318] border border-[#FAD0D6]',
+    plum: 'bg-[#5C0F2E] text-white',
+  }[tone];
   return <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${t}`}>{children}</span>;
 };
 export const statusTone = (s: string) => (['approved', 'delivered', 'captured', 'active', 'confirmed', 'refunded', 'accepted'].includes(s) ? 'ok' : ['rejected', 'cancelled', 'failed', 'suspended', 'not_recommended'].includes(s) ? 'bad' : ['draft', 'pending_payment', 'created'].includes(s) ? 'plain' : 'warn') as 'ok' | 'bad' | 'plain' | 'warn';
 export const StatusBadge = ({ s }: { s?: string }) => <Badge tone={statusTone(s ?? '')}>{(s ?? '').replace(/_/g, ' ')}</Badge>;
 
 const LEVELS: Record<string, { label: string; icon: string; cls: string }> = {
-  great: { label: 'Great match', icon: '✓', cls: 'bg-[#E3F3EA] text-ok border-ok/40' },
-  good: { label: 'Good match', icon: '✓', cls: 'bg-[#EAF3F7] text-[#2B6A85] border-sky' },
-  caution: { label: 'Use with caution', icon: '!', cls: 'bg-[#FBEFD9] text-warn border-warn/40' },
-  not_recommended: { label: 'Not recommended', icon: '✕', cls: 'bg-[#FBE4E1] text-bad border-bad/40' },
+  great: { label: 'Great match', icon: '✓', cls: 'bg-[#EAF5EF] text-[#26734E] border-[#CDE5D6]' },
+  good: { label: 'Good match', icon: '✓', cls: 'bg-[#EAF5EF] text-[#26734E] border-[#CDE5D6]' },
+  caution: { label: 'Use with caution', icon: '!', cls: 'bg-[#FAF3E8] text-[#8C6D58] border-[#F2E5D5]' },
+  not_recommended: { label: 'Not recommended', icon: '✕', cls: 'bg-[#FCECF0] text-[#B42318] border-[#FAD0D6]' },
 };
 export const MatchBadge = ({ level, score }: { level: string; score?: number }) => {
   const l = LEVELS[level] ?? LEVELS.caution;
-  return <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium ${l.cls}`}><span aria-hidden className="font-bold">{l.icon}</span>{l.label}{score != null && <span className="tnum opacity-80">· {score}</span>}</span>;
+  return <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${l.cls}`}><span aria-hidden className="font-bold">{l.icon}</span>{l.label}{score != null && <span className="tnum opacity-80">· {score}</span>}</span>;
 };
 export const Stars = ({ value, count }: { value: number; count?: number }) => (
-  <span className="inline-flex items-center gap-1 text-sm" aria-label={`Rated ${value} out of 5`}>
-    <span aria-hidden className="text-rose">{'★'.repeat(Math.round(value))}<span className="text-line">{'★'.repeat(5 - Math.round(value))}</span></span>
+  <span className="inline-flex items-center gap-1 text-xs" aria-label={`Rated ${value} out of 5`}>
+    <span aria-hidden className="text-[#C59B56]">{'★'.repeat(Math.round(value))}<span className="text-[#E8DCDE]">{'★'.repeat(5 - Math.round(value))}</span></span>
     {count != null && <span className="text-muted">({count})</span>}
   </span>
 );

@@ -73,8 +73,8 @@ export default function ProductPage() {
       <nav aria-label="Breadcrumb" className="text-sm text-muted"><Link href="/products">Products</Link> / <Link href={`/products?category=${data.category?.slug}`}>{data.category?.name}</Link></nav>
       <div className="grid gap-8 md:grid-cols-2">
         <div>
-          <div className="card overflow-hidden"><ProductImage src={media[img]?.url} alt={media[img]?.alt} title={p.title} /></div>
-          {media.length > 1 && <div className="mt-3 flex gap-2 overflow-x-auto">{media.map((m: any, i: number) => <button key={i} onClick={() => setImg(i)} aria-label={`Show image ${i + 1}`} aria-current={i === img} className={`h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 ${i === img ? 'border-rose' : 'border-line'}`}><ProductImage src={m.url} alt={m.alt} title={p.title} /></button>)}</div>}
+          <div className="card overflow-hidden"><ProductImage src={media[img]?.url} alt={media[img]?.alt} title={p.title} slug={p.slug} /></div>
+          {media.length > 1 && <div className="mt-3 flex gap-2 overflow-x-auto">{media.map((m: any, i: number) => <button key={i} onClick={() => setImg(i)} aria-label={`Show image ${i + 1}`} aria-current={i === img} className={`h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 ${i === img ? 'border-rose' : 'border-line'}`}><ProductImage src={m.url} alt={m.alt} title={p.title} slug={p.slug} /></button>)}</div>}
         </div>
         <div className="space-y-5">
           <div><Link href={`/products?brand=${data.brand?.slug}`} className="text-sm text-rose-deep underline">{data.brand?.name}</Link><h1 className="mt-1 text-3xl md:text-4xl">{p.title}</h1>{p.ratingCount > 0 && <div className="mt-2"><Stars value={p.ratingAvg} count={p.ratingCount} /></div>}</div>

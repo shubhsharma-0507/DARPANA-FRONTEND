@@ -1,125 +1,455 @@
 'use client';
-import { ArrowRight, Brush, CreditCard, Droplets, Gift, Hand, RotateCcw, Scissors, ShieldCheck, Sparkles, SprayCan, Truck } from 'lucide-react';
+import {
+  ArrowRight,
+  Check,
+  CreditCard,
+  Info,
+  RotateCcw,
+  ShieldCheck,
+  Sparkles,
+  Truck,
+  Wand2,
+} from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ProductCard } from '@/components/ProductCard';
-import { ErrorBox, MatchBadge, Skeleton } from '@/components/ui';
+import { ErrorBox, Skeleton } from '@/components/ui';
 import { money } from '@/lib/api';
 import { useFetch } from '@/lib/hooks';
 import { useSiteConfig } from '@/lib/site';
 
-const CATS = [
-  { name: 'Skincare', slug: 'skincare', tag: 'Glow Naturally', Icon: Droplets },
-  { name: 'Makeup', slug: 'makeup', tag: 'Express Yourself', Icon: Brush },
-  { name: 'Fragrances', slug: 'fragrance', tag: 'Smell Amazing', Icon: SprayCan },
-  { name: 'Hair Care', slug: 'hair-care', tag: 'Stronger Hair', Icon: Scissors },
-  { name: 'Nail Care', slug: 'nail-care', tag: 'Nail it Perfect', Icon: Hand },
-  { name: 'Beauty Sets', slug: 'beauty-sets', tag: 'Perfect Combo', Icon: Gift },
+const CATEGORIES = [
+  { name: 'Skincare', slug: 'skincare', tag: 'Glow Naturally', img: '/home/cat-skincare.jpg' },
+  { name: 'Makeup', slug: 'makeup', tag: 'Express Yourself', img: '/home/cat-makeup.jpg' },
+  { name: 'Fragrances', slug: 'fragrance', tag: 'Smell Amazing', img: '/home/cat-fragrance.jpg' },
+  { name: 'Hair Care', slug: 'hair-care', tag: 'Stronger Hair', img: '/home/cat-hair-care.jpg' },
+  { name: 'Nail Care', slug: 'nail-care', tag: 'Nail It Perfect', img: '/home/cat-nail-care.jpg' },
+  { name: 'Beauty Sets', slug: 'beauty-sets', tag: 'Perfect Combo', img: '/home/cat-beauty-sets.jpg' },
 ];
-
-const HERO_FADE = 'linear-gradient(to right, transparent 0, #000 16%, #000 97%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 10%, #000 88%, transparent 100%)';
-const HERO_MASK = { WebkitMaskImage: HERO_FADE, maskImage: HERO_FADE, WebkitMaskComposite: 'source-in', maskComposite: 'intersect' } as React.CSSProperties;
 
 export default function Home() {
   const cfg = useSiteConfig();
-  const trending = useFetch<{ items: any[] }>('/products', { sort: 'popular', limit: 8 });
+  const trending = useFetch<{ items: any[] }>('/products', { sort: 'popular', limit: 4 });
   const fresh = useFetch<{ items: any[] }>('/products', { sort: 'newest', limit: 4 });
-  const best = cfg?.offers.length ? Math.max(...cfg.offers.map((o) => o.percent)) : 0;
-  const code = cfg?.offers.find((o) => o.percent === best)?.code;
-  const trust = [
-    [ShieldCheck, 'Verified', 'Sellers'], [Truck, 'Free Shipping', cfg ? `Above ${money(cfg.freeShippingAbove)}` : 'On select orders'],
-    [CreditCard, 'Secure', 'Payments'], [RotateCcw, 'Easy', 'Returns'], [Sparkles, 'Skin Match', 'Guidance'],
-  ] as const;
+
+  const trustBadges = [
+    { title: 'VERIFIED', subtitle: 'Sellers Only', Icon: ShieldCheck },
+    { title: 'FREE SHIP', subtitle: cfg ? `Above ${money(cfg.freeShippingAbove)}` : 'Above ₹999', Icon: Truck },
+    { title: 'SECURE', subtitle: 'Payments', Icon: CreditCard },
+    { title: 'EASY', subtitle: 'Returns', Icon: RotateCcw },
+    { title: 'SKIN MATCH', subtitle: 'Algorithmic Fit', Icon: Sparkles },
+  ];
+
   return (
-    <>
-      {/* ---------- Hero ---------- */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#FFE9EC] via-[#FED9DE] to-[#FDC8CF]">
-        <div aria-hidden className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-white/50 blur-3xl" />
-        <div aria-hidden className="pointer-events-none absolute right-1/3 top-0 h-60 w-60 rounded-full bg-[#FFB8C6]/50 blur-3xl" />
-        <div className="container relative grid items-center gap-2 pb-20 pt-10 lg:grid-cols-[1fr_1.15fr] lg:pb-24 lg:pt-14">
-          <div className="relative z-10">
-            <p className="font-script text-3xl text-coral md:text-4xl">Unleash Your Natural Glow <span aria-hidden>✨</span></p>
-            <h1 className="mt-2 text-6xl font-extrabold tracking-tight text-[#3A0A22] sm:text-7xl md:text-[5.5rem] lg:leading-[0.95]">DARPANA</h1>
-            <div className="mt-2 flex items-center gap-3" aria-hidden><span className="h-px flex-1 max-w-[70px] bg-coral/70" /><span className="font-serif text-2xl font-medium tracking-[0.55em] text-coral sm:text-3xl">COSMETICS</span><span className="h-px flex-1 max-w-[70px] bg-coral/70" /></div>
-            <p className="mt-6 font-serif text-2xl text-[#3A0A22] md:text-3xl">Discover Beauty. Feel <span className="font-script text-4xl text-coral md:text-5xl">Confident.</span></p>
-            <p className="mt-4 max-w-md text-[17px] text-ink/80">Premium beauty products for a more beautiful, confident and radiant you, matched to the skin profile you share.</p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link href="/products" className="btn-primary px-7 shadow-[0_10px_24px_-10px_rgba(187,16,66,.7)]"><ShoppingIcon />Shop Now <ArrowRight size={16} aria-hidden /></Link>
-              <Link href="/shade-finder" className="btn border border-coral/50 bg-white/60 px-6 text-coral hover:bg-white"><Sparkles size={16} aria-hidden />Find My Shade</Link>
+    <div className="space-y-16 md:space-y-24">
+      {/* ---------------- 1. HERO SECTION ---------------- */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#FFF5F6] via-[#FFF8F9] to-[#FAF4F6] pt-8 pb-16 lg:pt-14 lg:pb-24 border-b border-[#F0E5E8]">
+        <div className="container relative">
+          <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
+            {/* Left Copy */}
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#C59B56]">
+                <Sparkles size={14} className="text-[#C59B56]" />
+                <span>UNLEASH YOUR NATURAL GLOW</span>
+              </div>
+
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#3A0A1F] leading-[1.08]">
+                Discover Beauty.
+                <br />
+                Feel Confident.
+              </h1>
+
+              <p className="max-w-xl text-sm sm:text-base text-[#6B555E] leading-relaxed">
+                Curated, formulation-first beauty engineered for discernment. High-potency skincare, exquisite color palettes, and certified botanicals matched precisely to your personal skin profile.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                <Link
+                  href="/products"
+                  className="rounded-full bg-[#630D2B] px-7 py-3 text-xs md:text-sm font-semibold tracking-wider uppercase text-white shadow-md hover:bg-[#4E0A22] transition-colors inline-flex items-center gap-2"
+                >
+                  <span>SHOP VERIFIED COLLECTION</span>
+                  <ArrowRight size={15} />
+                </Link>
+                <Link
+                  href="/shade-finder"
+                  className="rounded-full border border-[#5C0F2E]/30 bg-white/70 px-6 py-3 text-xs md:text-sm font-semibold tracking-wider uppercase text-[#5C0F2E] hover:bg-white transition-colors inline-flex items-center gap-2"
+                >
+                  <Sparkles size={15} className="text-[#C59B56]" />
+                  <span>FIND MY SHADE</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Hero Image Card */}
+            <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
+              <div className="relative overflow-hidden rounded-3xl shadow-luxury bg-[#FAF0F2] border border-white">
+                <Image
+                  src="/home/hero-portrait.jpg"
+                  alt="Radiant smiling woman with Atelier Botanical Formulation"
+                  width={632}
+                  height={416}
+                  priority
+                  className="w-full h-auto object-cover select-none"
+                />
+
+                {/* Top Right Certificate Tag */}
+                <div className="absolute right-4 top-4 rounded-xl bg-[#FAF1E6] px-3 py-1.5 shadow-md border border-[#F0E0D0]/80">
+                  <p className="text-[9px] font-bold uppercase tracking-wider text-[#8C6D58] text-center leading-tight">
+                    SKIN MATCH
+                    <br />
+                    <span className="text-[10px] text-[#5C0F2E]">CERTIFIED STANDARD</span>
+                  </p>
+                </div>
+
+                {/* Floating Bottom Card */}
+                <div className="absolute inset-x-4 bottom-4 rounded-2xl bg-white/95 p-3.5 shadow-md backdrop-blur border border-white/80 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FCECF0] text-[#630D2B]">
+                      <Sparkles size={16} />
+                    </div>
+                    <div>
+                      <p className="font-serif text-xs md:text-sm font-bold text-[#3A0A1F] leading-snug">
+                        Atelier Botanical Formulation
+                      </p>
+                      <p className="text-[10px] md:text-[11px] text-[#7A646E]">
+                        100% Certified Ethical Chemistry
+                      </p>
+                    </div>
+                  </div>
+                  <span className="rounded bg-[#FAF3E8] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#C59B56] shrink-0">
+                    IN FOCUS
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="relative -mx-4 mt-4 lg:mx-0 lg:mt-0">
-            <Image src="/home/hero.jpg" alt="A woman with glowing skin surrounded by Darpana perfume, foundation, cream, brushes and a palette" width={967} height={460} priority sizes="(max-width:1024px) 100vw, 60vw" className="h-auto w-full select-none" style={{ ...HERO_MASK }} />
+
+          {/* Trust Strip */}
+          <div className="mt-12 rounded-2xl border border-[#F0E5E8] bg-white/90 p-4 shadow-sm backdrop-blur">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-5 divide-y md:divide-y-0 md:divide-x divide-[#F0E5E8]">
+              {trustBadges.map(({ title, subtitle, Icon }, idx) => (
+                <div
+                  key={title}
+                  className={`flex items-center gap-3 px-3 py-2 ${idx > 0 && idx < 2 ? 'border-t-0' : ''}`}
+                >
+                  <Icon size={24} className="text-[#630D2B] shrink-0" strokeWidth={1.75} />
+                  <div>
+                    <strong className="block text-xs font-bold uppercase tracking-wider text-[#3A0A1F]">
+                      {title}
+                    </strong>
+                    <span className="text-xs text-[#7A646E]">{subtitle}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ---------- Trust strip ---------- */}
-      <section className="container relative z-10 -mt-12" aria-label="Why shop with us">
-        <ul className="grid grid-cols-2 divide-line rounded-2xl border border-white/80 bg-white/90 py-3 shadow-card backdrop-blur md:grid-cols-5 md:divide-x">
-          {trust.map(([Icon, a, b]) => <li key={a} className="flex items-center gap-3 px-4 py-2 md:justify-center"><Icon size={30} strokeWidth={1.6} className="shrink-0 text-coral" aria-hidden /><span className="text-sm leading-tight"><strong className="block font-medium">{a}</strong><span className="text-muted">{b}</span></span></li>)}
-        </ul>
-      </section>
+      {/* ---------------- 2. DISCOVERY PORTALS / SHOP BY CATEGORY ---------------- */}
+      <section className="container">
+        <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#C59B56]">
+              DISCOVERY PORTALS
+            </p>
+            <h2 className="mt-1 font-serif text-3xl md:text-4xl font-bold text-[#3A0A1F]">
+              Shop by Category
+            </h2>
+          </div>
+          <p className="text-xs md:text-sm text-[#7A646E] max-w-md md:text-right leading-relaxed">
+            Hand-vetted selections categorized by physical skin interaction, bioactive compounds, and sensory depth.
+          </p>
+        </div>
 
-      {/* ---------- Shop by category ---------- */}
-      <section className="container pb-4 pt-14">
-        <div className="mb-7 flex items-center justify-center gap-4"><span aria-hidden className="h-px w-12 bg-coral/60 md:w-24" /><h2 className="text-center text-3xl md:text-4xl">Shop <span className="font-script text-4xl font-normal text-coral md:text-5xl">by Category</span></h2><span aria-hidden className="h-px w-12 bg-coral/60 md:w-24" /></div>
-        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
-          {CATS.map(({ name, slug, tag, Icon }) => (
-            <li key={slug}>
-              <Link href={`/products?category=${slug}`} className="group relative flex h-[118px] overflow-hidden rounded-2xl border border-white/70 bg-gradient-to-r from-[#FFE3E6] to-[#FDD0D4] shadow-card transition-transform duration-200 hover:-translate-y-0.5">
-                <Image src={`/home/cat-${slug}.jpg`} alt="" width={332} height={236} className="h-full w-[48%] object-cover" style={{ WebkitMaskImage: 'linear-gradient(to right, #000 62%, transparent 100%)', maskImage: 'linear-gradient(to right, #000 62%, transparent 100%)' }} />
-                <span className="flex flex-1 flex-col items-center justify-center gap-0.5 pr-2 text-center"><Icon size={22} strokeWidth={1.6} className="text-coral" aria-hidden /><strong className="text-[15px] font-semibold text-ink">{name}</strong><span className="inline-flex items-center gap-1 text-[11px] text-muted">{tag} <ArrowRight size={11} aria-hidden className="transition-transform group-hover:translate-x-0.5" /></span></span>
-              </Link>
-            </li>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {CATEGORIES.map(({ name, slug, tag, img }) => (
+            <Link
+              key={slug}
+              href={`/products?category=${slug}`}
+              className="group relative overflow-hidden rounded-2xl bg-white border border-[#EFE5E8] shadow-sm transition-all duration-300 hover:shadow-luxury hover:-translate-y-1 flex flex-col aspect-[3/4]"
+            >
+              <div className="relative h-full w-full overflow-hidden bg-[#FAF3F5]">
+                <Image
+                  src={img}
+                  alt={name}
+                  width={200}
+                  height={260}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-3 text-white">
+                  <strong className="block font-serif text-sm md:text-base font-bold text-white group-hover:text-[#F3CE96] transition-colors leading-tight">
+                    {name}
+                  </strong>
+                  <span className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-white/80 font-medium">
+                    {tag}
+                    <ArrowRight size={11} className="transition-transform group-hover:translate-x-1" />
+                  </span>
+                </div>
+              </div>
+            </Link>
           ))}
-        </ul>
+        </div>
       </section>
 
-      {/* ---------- Special offers ---------- */}
-      <section className="container py-8" aria-label="Special offers">
-        <div className="relative grid items-center gap-6 overflow-hidden rounded-3xl bg-gradient-to-r from-[#7E0A29] via-[#6A0C28] to-[#5C1227] px-6 py-8 text-white md:grid-cols-[1.1fr_auto_1.2fr_auto] md:px-12 md:py-6">
-          <div><p className="whitespace-nowrap font-script text-5xl leading-none text-white md:text-6xl">Special Offers</p><p className="mt-1 text-sm text-white/85">Look Beautiful, Save More!</p></div>
-          <span aria-hidden className="hidden h-16 w-px bg-white/30 md:block" />
-          <div>{best > 0 ? <><p className="text-sm tracking-[0.2em] text-white/80">UP TO</p><p className="font-serif text-5xl font-extrabold leading-none text-gold md:text-6xl">{best}% <span className="text-4xl md:text-5xl">OFF</span></p>{code && <p className="mt-2 text-sm text-white/80">Use code <strong className="tnum rounded bg-white/15 px-2 py-0.5 tracking-wider text-white">{code}</strong></p>}</> : <p className="font-serif text-3xl text-gold">New offers are on the way</p>}</div>
-          <div className="flex items-center justify-between gap-4 md:justify-end">
-            <Link href="/offers" className="btn bg-gradient-to-b from-[#F3CE96] to-[#DDA85C] px-6 font-semibold text-[#4A0A25] shadow-[0_8px_20px_-8px_rgba(0,0,0,.5)] hover:brightness-105">Grab the Deal <ArrowRight size={16} aria-hidden /></Link>
-            <Image src="/home/gifts.jpg" alt="" width={870} height={258} className="hidden h-24 w-auto xl:block" style={{ WebkitMaskImage: 'linear-gradient(to right, transparent, #000 25%)', maskImage: 'linear-gradient(to right, transparent, #000 25%)' }} />
+      {/* ---------------- 3. SPECIAL OFFERS BANNER ---------------- */}
+      <section className="container">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#4A0A1D] via-[#630E29] to-[#45091A] p-6 text-white shadow-xl md:p-10 lg:p-12">
+          <div aria-hidden className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/5 blur-3xl" />
+          <div className="relative z-10 grid items-center gap-8 lg:grid-cols-[1.4fr_1fr]">
+            <div className="space-y-3">
+              <span className="inline-block rounded-full border border-[#C59B56]/50 bg-[#3A0615]/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#EABE81]">
+                LIMITED SANCTUARY PRIVILEGE
+              </span>
+              <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-white">
+                Special Offers
+              </h2>
+              <p className="font-serif italic text-lg sm:text-xl text-white/90">
+                Look Beautiful, Save More!
+              </p>
+              <p className="text-xs sm:text-sm text-white/80 max-w-lg leading-relaxed pt-1">
+                Enjoy verified purity and dermatological formulations with complimentary courier privilege on your inaugural atelier order.
+              </p>
+            </div>
+
+            {/* Privilege Card Box */}
+            <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="space-y-1 text-center sm:text-left">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/70">
+                  PRIVILEGE CODE
+                </p>
+                <p className="font-serif text-2xl font-bold text-[#F3CE96]">
+                  10% OFF
+                </p>
+                <p className="text-xs text-white/90">
+                  Use code: <strong className="rounded bg-white/20 px-1.5 py-0.5 font-mono text-white">WELCOME10</strong>
+                </p>
+              </div>
+
+              <Link
+                href="/offers"
+                className="rounded-full bg-[#FAF3E8] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#4A0A1D] shadow-sm hover:bg-white transition-colors shrink-0 inline-flex items-center gap-1.5"
+              >
+                <span>GRAB THE DEAL</span>
+                <ArrowRight size={13} />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ---------- Products ---------- */}
-      <section className="container pb-6 pt-8"><div className="flex items-end justify-between"><h2>Popular right now</h2><Link href="/products?sort=popular" className="text-sm text-coral underline">See all</Link></div>
-        <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {trending.loading && Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-72" />)}
-          {trending.data?.items.map((p) => <ProductCard key={p.id} p={p} />)}
+      {/* ---------------- 4. POPULAR RIGHT NOW ---------------- */}
+      <section className="container">
+        <div className="mb-6 flex items-end justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#C59B56]">
+              DERMATOLOGIST & COMMUNITY APPROVED
+            </p>
+            <h2 className="mt-1 font-serif text-2xl md:text-3xl font-bold text-[#3A0A1F]">
+              Popular Right Now
+            </h2>
+          </div>
+          <Link
+            href="/products?sort=popular"
+            className="text-xs font-bold uppercase tracking-wider text-[#630D2B] hover:underline inline-flex items-center gap-1"
+          >
+            VIEW ALL FORMULATIONS <ArrowRight size={13} />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {trending.loading && Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-80" />)}
+          {trending.data?.items.map((p) => (
+            <ProductCard key={p.id} p={p} />
+          ))}
         </div>
         {trending.error && <ErrorBox message={trending.error} onRetry={trending.reload} />}
-        {trending.data && trending.data.items.length === 0 && <p className="rounded-xl bg-white p-6 text-muted">Products from approved sellers will appear here.</p>}
       </section>
 
-      {/* ---------- Skin Match ---------- */}
-      <section className="container py-12"><div className="grid items-center gap-8 rounded-3xl bg-blush-soft p-6 md:grid-cols-2 md:p-10">
-        <div><p className="font-script text-3xl text-coral">Only at Darpana</p><h2 className="mt-1">Know why it suits you, before you buy it.</h2><p className="mt-3 text-muted">Tell us your skin type, concerns and what to avoid. Every product page explains how well it fits, which ingredients matter, and what to watch for. Optional, private, and never shared with sellers.</p><Link href="/account/skin-profile" className="btn-primary mt-5">Build my skin profile</Link></div>
-        <div className="card mx-auto w-full max-w-sm p-5" aria-label="Example of a Skin Match result"><p className="mb-3 text-xs text-muted">Example result</p>
-          <div className="flex items-center gap-4"><Image src="/icon.png" alt="" width={72} height={72} className="h-[72px] w-[72px] rounded-xl bg-ivory object-contain p-1" /><div><p className="font-medium">Silk Skin Foundation</p><MatchBadge level="good" score={74} /></div></div>
-          <ul className="mt-4 space-y-2 text-sm"><li className="flex gap-2"><span className="text-ok" aria-hidden>✓</span>Suitable for dry skin</li><li className="flex gap-2"><span className="text-ok" aria-hidden>✓</span>No fragrance on the ingredient list</li><li className="flex gap-2"><span className="text-warn" aria-hidden>!</span>Not enough reviews from similar skin yet</li></ul>
-          <p className="mt-4 border-t border-line pt-3 text-xs text-muted">Based on what you shared and the listed ingredients. Not medical advice.</p></div>
-      </div></section>
+      {/* ---------------- 5. SKIN PROFILE / ONLY AT DARPANA ---------------- */}
+      <section className="container">
+        <div className="rounded-3xl border border-[#F2E8EB] bg-[#FFF5F7] p-6 md:p-10 lg:p-12">
+          <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
+            {/* Left */}
+            <div className="space-y-4">
+              <p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#7E0A29]">
+                <span>🧪</span> ONLY AT DARPANA
+              </p>
+              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#3A0A1F] leading-tight">
+                Know why it suits you,
+                <br />
+                before you buy it.
+              </h2>
+              <p className="text-xs sm:text-sm text-[#6B555E] max-w-lg leading-relaxed">
+                Tell us your skin type, concerns and what to avoid. Every product page explains how well it fits, which ingredients matter, and what to watch for. Optional, private, and never shared with sellers.
+              </p>
+              <div className="pt-2">
+                <Link
+                  href="/account/skin-profile"
+                  className="rounded-full bg-[#630D2B] px-6 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-md hover:bg-[#4E0A22] transition-colors inline-flex items-center gap-2"
+                >
+                  <span>BUILD MY SKIN PROFILE</span>
+                  <span>⊕</span>
+                </Link>
+                <p className="mt-2 text-[11px] text-[#8C7680] italic">
+                  Deterministic rule-based analysis. Zero data reselling. Revoke anytime.
+                </p>
+              </div>
+            </div>
 
-      <section className="container pb-6"><h2 className="text-center">How Skin Match works</h2>
-        <ol className="mt-6 grid gap-4 md:grid-cols-3">
-          {[['Tell us about your skin', 'A short quiz. Sensitive questions are optional and have their own consent.'], ['We compare it to the ingredients', 'Fixed, reviewable rules check your profile against each product’s full ingredient list. No guesswork from AI.'], ['You see the reasons', 'A level, a confidence label, and plain-language reasons and warnings on every product page.']].map(([t, d], i) => <li key={t} className="card p-6"><span className="font-serif text-3xl text-rose" aria-hidden>{i + 1}</span><h3 className="mt-2 text-lg">{t}</h3><p className="mt-1 text-muted">{d}</p></li>)}
-        </ol></section>
+            {/* Right Live Diagnostic Preview Card */}
+            <div className="rounded-2xl border border-[#EFE5E8] bg-white p-6 shadow-luxury space-y-4">
+              <div className="flex items-center justify-between gap-2 border-b border-[#F5EBF0] pb-3">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-muted">
+                  LIVE DIAGNOSTIC PREVIEW
+                </span>
+                <span className="rounded-full bg-[#EAF5EF] px-2.5 py-0.5 text-xs font-semibold text-[#26734E] inline-flex items-center gap-1">
+                  <Check size={12} strokeWidth={2.5} /> Good match · 74
+                </span>
+              </div>
 
-      <section className="container py-10"><div className="grid gap-6 overflow-hidden rounded-3xl bg-burgundy p-8 text-white md:grid-cols-[1fr_auto] md:items-center md:p-12">
-        <div><h2 className="!text-white">Foundation shades, without the guesswork</h2><p className="mt-3 max-w-xl text-white/80">Answer a few questions about undertone and depth, or tell us a shade that already works. We suggest three close matches across brands, with a confidence label. No camera needed.</p></div>
-        <Link href="/shade-finder" className="btn bg-white text-plum hover:bg-blush-soft">Find my shade</Link></div></section>
+              <div>
+                <h3 className="font-serif text-lg font-bold text-[#3A0A1F]">
+                  Silk Skin Foundation
+                </h3>
+              </div>
 
-      {fresh.data && fresh.data.items.length > 0 && <section className="container pb-6"><h2>New arrivals</h2><div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">{fresh.data.items.map((p) => <ProductCard key={p.id} p={p} />)}</div></section>}
-    </>
+              <ul className="space-y-2.5 text-xs">
+                <li className="flex items-start gap-2">
+                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#EAF5EF] text-[#26734E] text-[10px] font-bold mt-0.5">
+                    ✓
+                  </span>
+                  <div>
+                    <strong className="text-[#24141E]">Suitable for dry skin</strong>
+                    <p className="text-[11px] text-muted">Contains squalane and jojoba to reinforce lipid moisture layers.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#EAF5EF] text-[#26734E] text-[10px] font-bold mt-0.5">
+                    ✓
+                  </span>
+                  <div>
+                    <strong className="text-[#24141E]">No fragrance on the ingredient list</strong>
+                    <p className="text-[11px] text-muted">Zero synthetic odor masking compounds detected.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#FAF3E8] text-[#C59B56] text-[10px] font-bold mt-0.5">
+                    <Info size={10} />
+                  </span>
+                  <div>
+                    <strong className="text-[#24141E]">Confidence Note</strong>
+                    <p className="text-[11px] text-muted">Not enough reviews from identical skin profiles yet.</p>
+                  </div>
+                </li>
+              </ul>
+
+              <p className="border-t border-[#F5EBF0] pt-3 text-[11px] text-[#8C7680] italic">
+                Based on what you shared and the listed ingredients. Not medical advice.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------- 6. HOW SKIN MATCH WORKS ---------------- */}
+      <section className="container">
+        <div className="text-center mb-8">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#C59B56]">
+            TRANSPARENT METHODOLOGY
+          </p>
+          <h2 className="mt-1 font-serif text-3xl md:text-4xl font-bold text-[#3A0A1F]">
+            How Skin Match Works
+          </h2>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-3">
+          {[
+            {
+              step: '01',
+              title: 'Tell us about your skin',
+              desc: 'A brief, respectful diagnostic quiz. Sensitive questions are completely optional and hold separate privacy consents.',
+            },
+            {
+              step: '02',
+              title: 'We compare it to ingredients',
+              desc: "Fixed, reviewable rules compare your profile against every formulation's full INCI list. No black-box AI guesswork.",
+            },
+            {
+              step: '03',
+              title: 'You see clear reasons',
+              desc: 'Every single product card provides transparent match levels, ingredient warnings, and plain-language insights.',
+            },
+          ].map(({ step, title, desc }) => (
+            <div
+              key={step}
+              className="rounded-2xl border border-[#EFE5E8] bg-white p-6 md:p-8 shadow-sm space-y-3"
+            >
+              <span className="font-serif text-3xl font-light text-[#D1486E]/40" aria-hidden>
+                {step}
+              </span>
+              <h3 className="font-serif text-lg font-bold text-[#3A0A1F]">{title}</h3>
+              <p className="text-xs md:text-sm text-[#6B555E] leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ---------------- 7. DIGITAL SHADE MIRROR ---------------- */}
+      <section className="container">
+        <div className="relative overflow-hidden rounded-3xl bg-[#5C0F2E] p-8 text-white shadow-xl md:p-12">
+          <div className="grid items-center gap-6 lg:grid-cols-[1fr_auto]">
+            <div className="space-y-2.5 max-w-2xl">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/70">
+                ✣ DIGITAL SHADE MIRROR
+              </p>
+              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-white leading-tight">
+                Foundation shades, without the guesswork.
+              </h2>
+              <p className="text-xs sm:text-sm text-white/80 leading-relaxed pt-1">
+                Answer a few questions about undertone and depth, or tell us a shade that already works for you. We suggest three close matches across brands, with a confidence label. No camera or invasive scanning needed.
+              </p>
+            </div>
+
+            <Link
+              href="/shade-finder"
+              className="rounded-full bg-[#FAF3E8] px-7 py-3 text-xs font-bold uppercase tracking-wider text-[#4A0A1D] shadow-sm hover:bg-white transition-colors shrink-0 inline-flex items-center gap-2 whitespace-nowrap self-start lg:self-center"
+            >
+              <span>FIND MY SHADE</span>
+              <Wand2 size={14} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------- 8. NEW ARRIVALS ---------------- */}
+      <section className="container pb-12">
+        <div className="mb-6 flex items-end justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#C59B56]">
+              FRESH FROM INDEPENDENT LABORATORIES
+            </p>
+            <h2 className="mt-1 font-serif text-2xl md:text-3xl font-bold text-[#3A0A1F]">
+              New Arrivals
+            </h2>
+          </div>
+          <Link
+            href="/products?sort=newest"
+            className="text-xs font-bold uppercase tracking-wider text-[#630D2B] hover:underline inline-flex items-center gap-1"
+          >
+            EXPLORE ALL NEW <ArrowRight size={13} />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {fresh.loading && Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-80" />)}
+          {fresh.data?.items.map((p) => (
+            <ProductCard key={p.id} p={p} />
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }
-
-function ShoppingIcon() { return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" /></svg>; }
