@@ -147,7 +147,6 @@ export function Header() {
 
   return (
     <>
-      <TopBar />
       <header className="sticky top-0 z-40 border-b border-[#F0E5E8] bg-white shadow-xs">
         <div className="container py-3">
           {/* Main row: Logo, Search, User actions */}
