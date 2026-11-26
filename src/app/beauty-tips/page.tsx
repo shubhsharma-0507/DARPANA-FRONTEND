@@ -11,30 +11,30 @@ export default function BeautyTipsPage() {
   return (
     <div className="space-y-16 md:space-y-24 pb-16">
       {/* ---------------- 1. HERO SECTION ---------------- */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#FFF5F6] via-[#FFF8F9] to-[#FAF4F6] pt-10 pb-16 lg:pt-14 lg:pb-20 border-b border-[#F0E5E8]">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#FFF5F6] via-[#FFF8F9] to-[#FAF4F6] pt-6 sm:pt-10 pb-12 sm:pb-16 lg:pt-14 lg:pb-20 border-b border-[#F0E5E8]">
         <div className="container relative">
-          <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
+          <div className="grid items-center gap-8 lg:gap-10 lg:grid-cols-[1.1fr_1fr]">
             {/* Left Column */}
-            <div className="space-y-5">
-              <p className="font-serif italic text-base text-[#8C2449] tracking-wide">
+            <div className="space-y-4 sm:space-y-5">
+              <p className="font-serif italic text-sm sm:text-base text-[#8C2449] tracking-wide">
                 The Darpana Journal
               </p>
 
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#3A0A1F] leading-[1.08]">
+              <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#3A0A1F] leading-[1.1]">
                 Little things that help.
               </h1>
 
-              <p className="max-w-xl text-sm sm:text-base text-[#6B555E] leading-relaxed">
+              <p className="max-w-xl text-xs sm:text-sm md:text-base text-[#6B555E] leading-relaxed">
                 Practical beauty guidance to make smarter, kinder choices for your skin.
               </p>
 
               {/* Core Philosophy Box */}
-              <div className="rounded-2xl border border-[#F0E5E8] bg-white/90 p-5 shadow-sm space-y-2.5 max-w-lg backdrop-blur">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C59B56]">
+              <div className="rounded-2xl border border-[#F0E5E8] bg-white/90 p-4 sm:p-5 shadow-sm space-y-2 sm:space-y-2.5 max-w-lg backdrop-blur">
+                <div className="flex flex-wrap items-center justify-between gap-1.5">
+                  <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[#C59B56]">
                     CORE PHILOSOPHY
                   </span>
-                  <div className="flex items-center gap-2 text-[10px] font-semibold text-[#8C747E]">
+                  <div className="flex items-center gap-2 text-[9px] sm:text-[10px] font-semibold text-[#8C747E]">
                     <span className="inline-flex items-center gap-1">
                       <ShieldCheck size={12} className="text-[#26734E]" /> Dermatological Rigor
                     </span>
@@ -44,7 +44,7 @@ export default function BeautyTipsPage() {
                     </span>
                   </div>
                 </div>
-                <p className="font-serif text-base sm:text-lg font-bold text-[#3A0A1F]">
+                <p className="font-serif text-sm sm:text-base md:text-lg font-bold text-[#3A0A1F]">
                   Health &amp; safety first. Everything else second.
                 </p>
               </div>
@@ -52,7 +52,7 @@ export default function BeautyTipsPage() {
 
             {/* Right Hero Image */}
             <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
-              <div className="relative h-[320px] sm:h-[380px] w-full overflow-hidden rounded-3xl shadow-luxury bg-[#FAF0F2] border border-white">
+              <div className="relative h-[260px] sm:h-[340px] md:h-[380px] w-full overflow-hidden rounded-2xl sm:rounded-3xl shadow-luxury bg-[#FAF0F2] border border-white">
                 <Image
                   src="/tips/hero-tips.jpg"
                   alt="Aesthetic skincare bottles on textured linen"
@@ -62,8 +62,8 @@ export default function BeautyTipsPage() {
                   className="object-cover object-center select-none"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4 z-10">
-                  <span className="rounded-full bg-black/60 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur border border-white/20">
+                <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-10">
+                  <span className="rounded-full bg-black/60 px-3 sm:px-3.5 py-1 sm:py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur border border-white/20">
                     RITUAL &amp; FORMULATION
                   </span>
                 </div>

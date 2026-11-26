@@ -25,20 +25,23 @@ function List() {
       <div className="grid grid-cols-2 gap-2"><div><p className="label">Shade depth</p><select className="input" value={q.depth ?? ''} onChange={(e) => set('depth', e.target.value)}><option value="">Any</option>{Array.from({ length: 10 }, (_, i) => i + 1).map((d) => <option key={d} value={d}>{d}</option>)}</select></div>
         <div><p className="label">Undertone</p><select className="input" value={q.undertone ?? ''} onChange={(e) => set('undertone', e.target.value)}><option value="">Any</option>{['cool', 'neutral', 'warm', 'olive'].map((s) => <option key={s}>{s}</option>)}</select></div></div>
       {[['fragranceFree', 'Fragrance-free'], ['vegan', 'Vegan'], ['crueltyFree', 'Cruelty-free']].map(([k, l]) => <label key={k} className="flex items-center gap-2 text-sm"><input type="checkbox" className="h-5 w-5 accent-[#BB1042]" checked={q[k] === 'true'} onChange={(e) => set(k, e.target.checked ? 'true' : undefined)} />{l}</label>)}
-      <button className="btn-ghost btn-sm w-full" onClick={clear}>Clear all</button>
+      <div className="flex gap-2 pt-1">
+        <button className="btn-ghost btn-sm flex-1" onClick={clear}>Clear all</button>
+        {show && <button className="btn-primary btn-sm md:hidden flex-1" onClick={() => setShow(false)}>Apply</button>}
+      </div>
     </div>
   );
   const totalPages = data ? Math.ceil(data.total / data.limit) : 1; const page = Number(q.page ?? 1);
   return (
-    <div className="container py-8">
-      <div className="mb-6 flex flex-wrap items-end justify-between gap-3"><div><h1 className="text-3xl md:text-4xl">{q.q ? `Results for “${q.q}”` : 'All products'}</h1>{data && <p className="text-muted"><span className="tnum">{data.total}</span> products</p>}</div>
-        <div className="flex gap-2"><button className="btn-ghost btn-sm md:hidden" onClick={() => setShow(!show)} aria-expanded={show}>Filters</button>
-          <select className="input !w-auto" aria-label="Sort" value={q.sort ?? 'relevance'} onChange={(e) => set('sort', e.target.value)}><option value="relevance">Relevance</option><option value="price_asc">Price: low to high</option><option value="price_desc">Price: high to low</option><option value="newest">Newest</option><option value="popular">Popularity</option><option value="rating">Rating</option></select></div></div>
-      <div className="grid gap-8 md:grid-cols-[240px_1fr]">
-        <aside className={`${show ? 'block' : 'hidden'} md:block`} aria-label="Filters">{filters}</aside>
+    <div className="container py-6 sm:py-8">
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-3"><div><h1 className="text-2xl sm:text-3xl md:text-4xl">{q.q ? `Results for “${q.q}”` : 'All products'}</h1>{data && <p className="text-xs sm:text-sm text-muted"><span className="tnum">{data.total}</span> products</p>}</div>
+        <div className="flex gap-2"><button className="btn-ghost btn-sm md:hidden" onClick={() => setShow(!show)} aria-expanded={show}>{show ? 'Hide Filters' : 'Filters'}</button>
+          <select className="input !w-auto text-xs" aria-label="Sort" value={q.sort ?? 'relevance'} onChange={(e) => set('sort', e.target.value)}><option value="relevance">Relevance</option><option value="price_asc">Price: low to high</option><option value="price_desc">Price: high to low</option><option value="newest">Newest</option><option value="popular">Popularity</option><option value="rating">Rating</option></select></div></div>
+      <div className="grid gap-6 md:gap-8 md:grid-cols-[240px_1fr]">
+        <aside className={`${show ? 'block' : 'hidden'} md:block rounded-2xl border border-line bg-white p-4 md:border-0 md:bg-transparent md:p-0 shadow-sm md:shadow-none`} aria-label="Filters">{filters}</aside>
         <div>
           {error && <ErrorBox message={error} onRetry={reload} />}
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">{loading && Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-72" />)}{!loading && data?.items.map((p) => <ProductCard key={p.id} p={p} />)}</div>
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">{loading && Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-64 sm:h-72" />)}{!loading && data?.items.map((p) => <ProductCard key={p.id} p={p} />)}</div>
           {!loading && data && data.items.length === 0 && <Empty title="No products match these filters" hint="Try removing a filter or searching for a brand name." action={<button className="btn-primary" onClick={clear}>Clear filters</button>} />}
           {totalPages > 1 && <div className="mt-8 flex items-center justify-center gap-3"><button className="btn-ghost btn-sm" disabled={page <= 1} onClick={() => set('page', String(page - 1))}>Previous</button><span className="tnum text-sm">Page {page} of {totalPages}</span><button className="btn-ghost btn-sm" disabled={page >= totalPages} onClick={() => set('page', String(page + 1))}>Next</button></div>}
         </div>

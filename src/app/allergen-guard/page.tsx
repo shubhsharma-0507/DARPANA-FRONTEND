@@ -313,32 +313,32 @@ export default function AllergenGuardPage() {
         <div className="container relative">
           <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
             {/* Left Copy */}
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#C59B56]">
+            <div className="space-y-4 sm:space-y-6">
+              <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-[#C59B56]">
                 <Shield size={14} className="text-[#C59B56]" />
                 <span>DARPANA DIAGNOSTIC TOOLS</span>
               </div>
 
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#3A0A1F] leading-[1.08]">
+              <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#3A0A1F] leading-[1.1]">
                 Know Before You{' '}
                 <span className="font-serif italic text-[#8C2449]">Glow.</span>
               </h1>
 
-              <p className="max-w-xl text-sm sm:text-base text-[#6B555E] leading-relaxed">
+              <p className="max-w-xl text-xs sm:text-sm md:text-base text-[#6B555E] leading-relaxed">
                 Our dual-matrix formulation scanner compares the exact ingredients in any product against your personal INCI sensitivity profile, flags potential allergens, and evaluates your overall coverage confidence.
               </p>
 
               {/* Trust Points */}
-              <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-[#8C747E] pt-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 border border-[#E8DCE0] shadow-xs">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[11px] sm:text-xs font-semibold text-[#8C747E] pt-1">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 sm:px-3.5 sm:py-1.5 border border-[#E8DCE0] shadow-xs">
                   <CheckCircle2 size={13} className="text-[#26734E]" />
                   Deterministic Rule-Based
                 </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 border border-[#E8DCE0] shadow-xs">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 sm:px-3.5 sm:py-1.5 border border-[#E8DCE0] shadow-xs">
                   <Lock size={13} className="text-[#8C2449]" />
                   Zero Data Reselling
                 </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 border border-[#E8DCE0] shadow-xs">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 sm:px-3.5 sm:py-1.5 border border-[#E8DCE0] shadow-xs">
                   <FlaskConical size={13} className="text-[#C59B56]" />
                   100% INCI Match Index
                 </span>
@@ -347,7 +347,7 @@ export default function AllergenGuardPage() {
 
             {/* Right Hero Image Card */}
             <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
-              <div className="relative h-[320px] sm:h-[380px] w-full overflow-hidden rounded-3xl shadow-luxury bg-[#FAF0F2] border border-white">
+              <div className="relative h-[260px] sm:h-[340px] md:h-[380px] w-full overflow-hidden rounded-2xl sm:rounded-3xl shadow-luxury bg-[#FAF0F2] border border-white">
                 <Image
                   src="/allergen/allergen-hero.jpg"
                   alt="Glass dropper bottles on soft rose textile"
@@ -357,11 +357,11 @@ export default function AllergenGuardPage() {
                   className="object-cover object-center select-none"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4 z-10 flex items-center justify-between">
-                  <span className="rounded-full bg-black/60 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur border border-white/20">
+                <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-10 flex flex-wrap items-center justify-between gap-1.5">
+                  <span className="rounded-full bg-black/60 px-3 py-1 sm:px-3.5 sm:py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur border border-white/20">
                     Personalized Dual-Matrix Screening
                   </span>
-                  <span className="rounded-full bg-[#EAF5EF] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#26734E]">
+                  <span className="rounded-full bg-[#EAF5EF] px-2.5 py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-[#26734E]">
                     LIVE AUDIT READY
                   </span>
                 </div>
@@ -753,7 +753,7 @@ export default function AllergenGuardPage() {
 
               {/* Table */}
               <div className="overflow-x-auto rounded-2xl border border-[#EFE5E8]">
-                <table className="w-full text-left text-xs">
+                <table className="w-full text-left text-xs min-w-[620px]">
                   <thead className="border-b border-[#EFE5E8] bg-[#FAF5F6] text-[10px] font-bold uppercase tracking-wider text-[#8A737B]">
                     <tr>
                       <th className="py-3 px-4">Ingredient (INCI)</th>

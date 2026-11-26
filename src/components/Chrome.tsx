@@ -19,21 +19,21 @@ const FALLBACK_CATS = [
 function TopBar() {
   const cfg = useSiteConfig();
   return (
-    <div className="bg-[#560B23] text-white/95 text-[11px] md:text-xs py-1.5 border-b border-[#6E1231]">
-      <div className="container flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-1.5 text-white/90">
-          <Shield size={13} className="text-[#EABE81]" />
-          <span className="font-semibold tracking-wider uppercase text-[10px] md:text-[11px]">DARPANA ATELIER STANDARD</span>
+    <div className="bg-[#560B23] text-white/95 text-[10px] sm:text-xs py-1.5 border-b border-[#6E1231]">
+      <div className="container flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1.5 text-white/90 shrink-0">
+          <Shield size={12} className="text-[#EABE81] shrink-0" />
+          <span className="font-semibold tracking-wider uppercase text-[10px] sm:text-[11px]">DARPANA ATELIER STANDARD</span>
         </div>
-        <p className="hidden lg:block text-center text-white/85 text-[11px] tracking-wide">
-          {cfg ? `FREE SHIPPING ON ORDERS ABOVE ${money(cfg.freeShippingAbove)}` : 'FREE SHIPPING ON SELECT ORDERS'} · ORIGINAL PRODUCTS FROM VERIFIED SELLERS · SKIN MATCH: SHOP FOR YOUR SKIN PROFILE · EASY RETURNS
+        <p className="hidden xl:block text-center text-white/85 text-[11px] tracking-wide truncate max-w-xl">
+          {cfg ? `FREE SHIPPING ON ORDERS ABOVE ${money(cfg.freeShippingAbove)}` : 'FREE SHIPPING ON SELECT ORDERS'} · ORIGINAL PRODUCTS FROM VERIFIED SELLERS · SKIN MATCH · EASY RETURNS
         </p>
-        <div className="flex items-center gap-3 text-[11px] ml-auto">
-          <Link href="/register?type=seller" className="text-white/90 hover:text-white uppercase tracking-wider font-medium hover:underline">
+        <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] ml-auto shrink-0">
+          <Link href="/register?type=seller" className="text-white/90 hover:text-white uppercase tracking-wider font-medium hover:underline whitespace-nowrap">
             SELL ON DARPANA
           </Link>
           <span className="text-white/40">|</span>
-          <span className="text-white/80 font-medium">EN / INR</span>
+          <span className="text-white/80 font-medium whitespace-nowrap">EN / INR</span>
         </div>
       </div>
     </div>
@@ -153,10 +153,10 @@ export function Header() {
           {/* Main row: Logo, Search, User actions */}
           <div className="flex items-center gap-4 lg:gap-8">
             <Link href="/" aria-label="Darpana Cosmetics home" className="shrink-0 flex flex-col group">
-              <span className="font-serif text-2xl md:text-3xl font-extrabold tracking-[0.22em] text-[#5C0F2E] leading-none group-hover:text-[#630D2B] transition-colors">
+              <span className="font-serif text-xl sm:text-2xl md:text-3xl font-extrabold tracking-[0.16em] sm:tracking-[0.22em] text-[#5C0F2E] leading-none group-hover:text-[#630D2B] transition-colors">
                 DARPANA
               </span>
-              <span className="font-serif text-[11px] md:text-xs tracking-[0.14em] text-[#8C2449] font-normal leading-tight mt-0.5">
+              <span className="font-serif text-[10px] sm:text-[11px] md:text-xs tracking-[0.14em] text-[#8C2449] font-normal leading-tight mt-0.5">
                 Cosmetics
               </span>
             </Link>
@@ -319,66 +319,80 @@ export function Header() {
 
         {/* Mobile menu */}
         {open && (
-          <div className="container space-y-3 border-t border-line py-4 lg:hidden bg-white">
+          <div className="container space-y-4 border-t border-[#F0E5E8] py-5 lg:hidden bg-white max-h-[85vh] overflow-y-auto shadow-2xl">
             <form onSubmit={go} className="relative">
               <input
                 className="input rounded-full pr-12 text-xs"
-                placeholder="Search formulations, shade notes..."
+                placeholder="Search formulations, shade notes, botanicals..."
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 aria-label="Search products"
               />
-              <button aria-label="Search" className="absolute right-2 top-2 h-8 w-8 text-[#5C0F2E]">
-                <Search size={18} className="mx-auto" />
+              <button aria-label="Search" className="absolute right-2 top-2 h-8 w-8 text-[#5C0F2E] flex items-center justify-center">
+                <Search size={16} />
               </button>
             </form>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <Link href="/products" className="btn-primary btn-sm text-center">
-                Shop All
-              </Link>
-              <Link href="/allergen-guard" className="btn-primary btn-sm text-center !bg-[#5C0F2E]">
-                Allergen Guard
-              </Link>
-              <Link href="/shade-finder" className="btn-ghost btn-sm text-center">
-                Shade Finder
-              </Link>
-              <Link href="/account/skin-profile" className="btn-ghost btn-sm text-center">
-                Skin Match
-              </Link>
-              <Link href="/offers" className="btn-ghost btn-sm text-center">
-                Offers
-              </Link>
-              <Link href="/about" className="btn-ghost btn-sm text-center">
-                About Us
-              </Link>
-              <Link href="/beauty-tips" className="btn-ghost btn-sm text-center">
-                Beauty Tips
-              </Link>
-              <Link href="/contact" className="btn-ghost btn-sm text-center">
-                Contact
-              </Link>
-              <Link href="/register?type=seller" className="btn-ghost btn-sm text-center">
-                Sell on Darpana
-              </Link>
-            </div>
-            <p className="pt-2 text-[11px] font-bold uppercase tracking-wider text-muted">Categories</p>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              {cats.map(([n, s]) => (
-                <Link key={s} href={`/products?category=${s}`} className="btn-ghost btn-sm text-center">
-                  {n}
+
+            <div className="space-y-1">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#8A737B] px-1">Sanctuary Portals</p>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <Link href="/products" className="btn-primary btn-sm text-center">
+                  Shop All
                 </Link>
-              ))}
-            </div>
-            {!me && (
-              <div className="grid grid-cols-2 gap-2 pt-2">
-                <Link href="/login" className="btn-primary btn-sm text-center">
-                  Sign in
+                <Link href="/allergen-guard" className="btn-primary btn-sm text-center !bg-[#5C0F2E]">
+                  Allergen Guard
                 </Link>
-                <Link href="/register" className="btn-ghost btn-sm text-center">
-                  Create account
+                <Link href="/shade-finder" className="btn-ghost btn-sm text-center">
+                  Shade Finder
+                </Link>
+                <Link href="/account/skin-profile" className="btn-ghost btn-sm text-center">
+                  Skin Match
+                </Link>
+                <Link href="/beauty-tips" className="btn-ghost btn-sm text-center">
+                  Beauty Tips
+                </Link>
+                <Link href="/offers" className="btn-ghost btn-sm text-center">
+                  Offers &amp; Deals
+                </Link>
+                <Link href="/about" className="btn-ghost btn-sm text-center">
+                  About Us
+                </Link>
+                <Link href="/contact" className="btn-ghost btn-sm text-center">
+                  Concierge &amp; Care
                 </Link>
               </div>
-            )}
+            </div>
+
+            <div className="space-y-1.5 pt-1">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#8A737B] px-1">Curated Categories</p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+                {cats.map(([n, s]) => (
+                  <Link key={s} href={`/products?category=${s}`} className="rounded-xl border border-[#F0E5E8] bg-[#FAF3F5] px-3 py-2 text-center text-xs font-medium text-[#3A0A1F] hover:bg-[#FCECF0] transition-colors">
+                    {n}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-t border-[#F0E5E8] pt-3">
+              {!me ? (
+                <div className="grid grid-cols-2 gap-2">
+                  <Link href="/login" className="btn-primary btn-sm text-center">
+                    Sign in
+                  </Link>
+                  <Link href="/register" className="btn-ghost btn-sm text-center">
+                    Create account
+                  </Link>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between text-xs text-muted px-1">
+                  <span>Signed in as <strong className="text-ink">{me.name}</strong></span>
+                  <button onClick={logout} className="text-bad font-semibold hover:underline">
+                    Sign out
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </header>
@@ -399,11 +413,11 @@ export function Footer() {
   };
 
   return (
-    <footer className="mt-24 border-t border-[#EFE3E6] bg-[#FAF4F6] text-ink">
-      <div className="container py-14">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
+    <footer className="mt-16 sm:mt-24 border-t border-[#EFE3E6] bg-[#FAF4F6] text-ink">
+      <div className="container py-10 sm:py-14">
+        <div className="grid gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-5">
           {/* Col 1: Brand & Newsletter */}
-          <div className="lg:col-span-1 space-y-4">
+          <div className="sm:col-span-2 lg:col-span-1 space-y-4">
             <Link href="/" className="inline-flex flex-col">
               <span className="font-serif text-2xl font-extrabold tracking-[0.22em] text-[#5C0F2E] leading-none">
                 DARPANA

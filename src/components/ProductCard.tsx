@@ -121,53 +121,53 @@ export function ProductCard({ p }: { p: any }) {
       </div>
 
       {/* Info */}
-      <div className="flex flex-1 flex-col p-3.5">
+      <div className="flex flex-1 flex-col p-2.5 sm:p-3.5">
         {/* Brand row with star rating */}
-        <div className="flex items-center justify-between gap-1 text-[11px]">
+        <div className="flex items-center justify-between gap-1 text-[10px] sm:text-[11px]">
           <p className="font-bold uppercase tracking-widest text-[#8A737B] truncate">
             {p.brand?.name || 'AURELIA (DEMO)'}
           </p>
-          <div className="flex items-center gap-1 text-ink/80 shrink-0 font-medium text-xs">
-            <Star size={11} className="fill-[#C59B56] text-[#C59B56]" />
+          <div className="flex items-center gap-0.5 sm:gap-1 text-ink/80 shrink-0 font-medium text-[11px] sm:text-xs">
+            <Star size={10} className="fill-[#C59B56] text-[#C59B56] sm:w-[11px] sm:h-[11px]" />
             <span>{rating.toFixed(1)}</span>
           </div>
         </div>
 
         {/* Product title */}
-        <Link href={`/products/${p.slug}`} className="mt-1">
-          <h3 className="line-clamp-1 font-serif text-[15px] font-bold text-[#24141E] group-hover:text-[#630D2B] transition-colors">
+        <Link href={`/products/${p.slug}`} className="mt-0.5 sm:mt-1">
+          <h3 className="line-clamp-1 font-serif text-[13px] sm:text-[15px] font-bold text-[#24141E] group-hover:text-[#630D2B] transition-colors">
             {p.title.replace(' (Demo)', '')}
           </h3>
         </Link>
 
         {/* Subtitle / Tags line */}
-        <div className="mt-1.5 min-h-[20px] flex flex-wrap items-center gap-1 text-xs">
+        <div className="mt-1 sm:mt-1.5 min-h-[18px] sm:min-h-[20px] flex flex-wrap items-center gap-1 text-xs">
           {tags.length > 0 ? (
             tags.map((t) => (
-              <span key={t} className="rounded bg-[#F6EFF1] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#7A646E]">
+              <span key={t} className="rounded bg-[#F6EFF1] px-1 sm:px-1.5 py-0.5 text-[8px] sm:text-[9px] font-bold uppercase tracking-wider text-[#7A646E]">
                 {t}
               </span>
             ))
           ) : (
-            <p className="line-clamp-1 text-[11px] text-muted">
+            <p className="line-clamp-1 text-[10px] sm:text-[11px] text-muted">
               {s.includes('lipstick') ? 'Hydrating botanical oils with plush, matte...' : s.includes('foundation') ? 'Weightless second-skin radiant coverage...' : 'Formulation-first botanical care...'}
             </p>
           )}
         </div>
 
         {/* Price & dispatch row */}
-        <div className="mt-auto pt-3 border-t border-[#F5EBEF] flex items-baseline justify-between gap-2">
-          <div className="flex items-baseline gap-1.5">
-            <span className="tnum font-bold text-sm md:text-base text-[#5C0F2E]">
+        <div className="mt-auto pt-2.5 sm:pt-3 border-t border-[#F5EBEF] flex items-baseline justify-between gap-1 sm:gap-2">
+          <div className="flex items-baseline gap-1 sm:gap-1.5 min-w-0">
+            <span className="tnum font-bold text-xs sm:text-sm md:text-base text-[#5C0F2E] truncate">
               {money(p.price)}
             </span>
             {p.mrp && p.mrp > p.price && (
-              <span className="tnum text-xs text-muted line-through">
+              <span className="tnum text-[10px] sm:text-xs text-muted line-through truncate">
                 {money(p.mrp)}
               </span>
             )}
           </div>
-          <p className="text-[10px] text-muted truncate">
+          <p className="text-[9px] sm:text-[10px] text-muted truncate shrink-0">
             {p.offers > 1 ? `${p.offers} sellers` : 'Ships in 2d'}
           </p>
         </div>
