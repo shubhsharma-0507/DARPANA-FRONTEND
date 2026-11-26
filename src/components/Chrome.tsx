@@ -122,14 +122,21 @@ export function Header() {
   };
 
   const isBuyer = !me || me.role === 'BUYER';
-  const navLink = (href: string, label: string) => (
-    <Link
-      href={href}
-      className={`px-3 py-1.5 text-xs font-semibold uppercase tracking-wider transition-colors ${path === href ? 'text-[#630D2B]' : 'text-ink/80 hover:text-[#630D2B]'}`}
-    >
-      {label}
-    </Link>
-  );
+  const navLink = (href: string, label: string) => {
+    const isActive = path === href || (href !== '/' && path.startsWith(href));
+    return (
+      <Link
+        href={href}
+        className={`px-3 py-1 text-xs font-semibold uppercase tracking-wider transition-all rounded ${
+          isActive
+            ? 'bg-[#630D2B] text-white shadow-xs'
+            : 'text-ink/80 hover:text-[#630D2B]'
+        }`}
+      >
+        {label}
+      </Link>
+    );
+  };
 
   const badge = (n: number) =>
     n > 0 && (
@@ -285,11 +292,11 @@ export function Header() {
           </div>
 
           {/* Desktop Nav menu */}
-          <nav aria-label="Main" className="hidden lg:flex items-center gap-1 pt-3 mt-2 border-t border-[#F5EAEB]">
+          <nav aria-label="Main" className="hidden lg:flex items-center gap-1.5 pt-3 mt-2 border-t border-[#F5EAEB]">
             <Link
               href="/products"
-              className={`rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${
-                path === '/products' && !path.includes('?') ? 'bg-[#630D2B] text-white shadow-sm' : 'bg-[#630D2B] text-white hover:bg-[#4C081F]'
+              className={`rounded px-3 py-1 text-xs font-semibold uppercase tracking-wider transition-all ${
+                path === '/products' && !path.includes('?') ? 'bg-[#630D2B] text-white shadow-xs' : 'text-ink/80 hover:text-[#630D2B]'
               }`}
             >
               SHOP ALL
@@ -306,6 +313,7 @@ export function Header() {
             {navLink('/offers', 'OFFERS')}
             {navLink('/about', 'ABOUT')}
             {navLink('/beauty-tips', 'BEAUTY TIPS')}
+            {navLink('/allergen-guard', 'ALLERGEN GUARD')}
           </nav>
         </div>
 
@@ -327,6 +335,9 @@ export function Header() {
             <div className="grid grid-cols-2 gap-2 text-xs">
               <Link href="/products" className="btn-primary btn-sm text-center">
                 Shop All
+              </Link>
+              <Link href="/allergen-guard" className="btn-primary btn-sm text-center !bg-[#5C0F2E]">
+                Allergen Guard
               </Link>
               <Link href="/shade-finder" className="btn-ghost btn-sm text-center">
                 Shade Finder
@@ -445,8 +456,10 @@ export function Footer() {
           <div>
             <h3 className="mb-3 font-serif text-sm font-bold text-[#3A0A1F] tracking-wide">Diagnostic Tools</h3>
             <ul className="space-y-2 text-xs text-[#7A646E]">
+              <li><Link href="/allergen-guard" className="hover:text-[#630D2B] transition-colors font-medium text-[#5C0F2E]">Allergen Guard Scanner</Link></li>
               <li><Link href="/account/skin-profile" className="hover:text-[#630D2B] transition-colors">Skin Profile Diagnostic</Link></li>
               <li><Link href="/shade-finder" className="hover:text-[#630D2B] transition-colors">Digital Shade Mirror</Link></li>
+              <li><Link href="/beauty-tips" className="hover:text-[#630D2B] transition-colors">Beauty Tips & Daily Wisdom</Link></li>
               <li><Link href="/about" className="hover:text-[#630D2B] transition-colors">Ingredient Integrity Index</Link></li>
               <li><Link href="/offers" className="hover:text-[#630D2B] transition-colors">Atelier Privileges</Link></li>
             </ul>
